@@ -1,0 +1,57 @@
+name: test if
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-if:
+    runs-on: ubuntu-latest
+    steps:
+      - name: The condition is true
+        if: >
+          github.actor == 'AllanChain' &&
+          github.event_name == 'push'
+        run: echo hello
+      - name: Skips no matter `>`
+        if: >
+          github.actor == 'AllanChain1' &&
+          github.event_name == 'push'
+        run: echo hello
+      - name: ... or `>-`
+        if: >
+          github.actor == 'AllanChain1' &&
+          github.event_name == 'push'
+        run: echo hello
+      - name: ... or `|`
+        if: |
+          github.actor == 'AllanChain1' &&
+          github.event_name == 'push'
+        run: echo hello
+      - name: Always true if not trim
+        if: >
+          ${{
+            github.actor == 'AllanChain1' &&
+            github.event_name == 'push'
+          }}
+        run: echo hello
+      - name: Because end with `}}` works
+        if: ${{ github.actor == 'AllanChain1' && github.event_name == 'push' }}
+        run: echo hello
+      - name: ... but not will not
+        if: "${{ github.actor == 'AllanChain1' && github.event_name == 'push' }} "
+        run: echo hello
+      - name: Trim will skip
+        if: >-
+          ${{
+            github.actor == 'AllanChain1' &&
+            github.event_name == 'push'
+          }}
+        run: echo hello
+      - name: Even in literal mode
+        if: |-
+          ${{
+            github.actor == 'AllanChain1' &&
+            github.event_name == 'push'
+          }}
+        run: echo hello
